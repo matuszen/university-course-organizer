@@ -225,3 +225,6 @@ __marimo__/
 # Lokalne bazy i pliki pomocnicze SQLite
 *.sqlite3
 *.sqlite3-*
+
+# vscode files
+.vscode/
