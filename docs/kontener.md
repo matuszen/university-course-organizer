@@ -6,7 +6,8 @@ Polecenia zakładają uruchomienie w katalogu repozytorium.
 
 ## Obraz i proces startowy
 
-Dockerfile korzysta z bazowego obrazu Python 3.12 i instaluje zależności
+Dockerfile korzysta z obrazu `python:3.12-alpine3.23`, aktualizuje pakiety systemowe
+poleceniem `apk upgrade --no-cache` i instaluje zależności
 z `uv.lock`, z pominięciem grupy deweloperskiej. Kod aplikacji oraz skrypt danych
 początkowych są kopiowane do `/app`. Proces działa jako użytkownik `app`,
 z UID i GID równymi 10001.
@@ -41,7 +42,7 @@ odtworzenia kontenera, aby proces otrzymał nowe wartości.
 ## Budowa i uruchomienie
 
 ```sh
-docker build -t course-organizer:local .
+docker build --pull --no-cache -t course-organizer:local .
 docker run -d --name course-organizer \
   --restart unless-stopped \
   --env-file .env \
@@ -118,7 +119,7 @@ Przy kolejnych kopiach stosuj osobne nazwy plików, aby zachować wcześniejsze 
 Następnie przebuduj obraz i odtwórz kontener z tym samym wolumenem oraz konfiguracją.
 
 ```sh
-docker build -t course-organizer:local .
+docker build --pull --no-cache -t course-organizer:local .
 docker rm course-organizer
 docker run -d --name course-organizer \
   --restart unless-stopped \
@@ -136,7 +137,8 @@ jej schematu z wykonanymi migracjami.
 
 ## Obraz z GitHub Container Registry
 
-CI publikuje obraz po udanych testach i próbie uruchomienia na gałęzi `main`.
+CI publikuje obraz po udanych testach, skanie podatności i próbie uruchomienia
+na gałęzi `main`.
 Dla konkretnego wydania wybierz tag równy pełnemu SHA commita.
 
 ```sh
@@ -157,3 +159,25 @@ do GHCR kontem mającym prawo odczytu pakietu.
 | `unable to open database file` lub `readonly database` | ścieżka `DATABASE_PATH`, montowanie `/data` i uprawnienia katalogu |
 | Hostowy port 8000 jest zajęty | zmiana mapowania na `127.0.0.1:8001:8000` i adresu klienta |
 | Docker jest niedostępny w WSL | działający Docker Desktop oraz integracja danej dystrybucji |
+
+## Kontrola podatności obrazu
+
+CI pobiera aktualną bazę obrazu i buduje aplikację z wyłączonym cache warstw,
+aby wykonać aktualizację pakietów także wtedy, gdy tag bazowy pozostał bez zmian.
+Przed publikacją Trivy skanuje gotowy obraz, obejmując pakiety systemowe
+oraz zainstalowane zależności Pythona. Wykrycie podatności `HIGH` lub `CRITICAL`
+przerywa job i blokuje publikację. Skan uwzględnia również podatności, dla których
+poprawka jest jeszcze niedostępna. Wynik znajduje się w logach kroku
+`Scan container for high and critical vulnerabilities`.
+
+Lokalne sprawdzenie wymaga Trivy oraz działającego Dockera.
+
+```sh
+docker build --pull --no-cache -t course-organizer:local .
+trivy image --scanners vuln --severity HIGH,CRITICAL --exit-code 1 course-organizer:local
+```
+
+Raport przypisany do bazowego obrazu opisuje jego oryginalne warstwy.
+Wynik gotowej aplikacji uwzględnia aktualizacje wykonane w Dockerfile i zależności
+z `uv.lock`. Aktualny wynik należy sprawdzać po przebudowaniu obrazu.
+[Dokumentacja skanowania obrazów](https://trivy.dev/docs/latest/target/container_image/)

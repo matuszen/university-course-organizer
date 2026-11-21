@@ -42,7 +42,7 @@ komunikat zakończenia oraz zgodność z danymi zapisanymi wcześniej przez ORM.
 
 ```sh
 DATABASE_PATH=/tmp/plan-check.sqlite3 uv run python manage.py migrate --noinput
-docker build -t course-organizer .
+docker build --pull --no-cache -t course-organizer .
 docker run --rm -p 8000:8000 -v course-test:/data \
   -e DJANGO_SECRET_KEY=lokalny-sekret-do-testu course-organizer
 ```
@@ -53,4 +53,7 @@ Oczekiwane są kod `200` i pusta lista w `results`. Po ponownym uruchomieniu
 kontenera z tym samym wolumenem zapisane dane powinny nadal istnieć.
 
 GitHub Actions wykonuje kontrolę jakości i migracji dla zmian do `main`.
-Po pushu na `main` dodatkowo sprawdza start kontenera i publikuje obraz w GHCR.
+Po pushu na `main` dodatkowo skanuje gotowy obraz pod kątem podatności `HIGH`
+i `CRITICAL`, sprawdza start kontenera i publikuje obraz w GHCR. Wykrycie podatności
+z tych kategorii blokuje publikację. Polecenie do lokalnego skanu znajduje się
+w [instrukcji kontenera](kontener.md#kontrola-podatności-obrazu).
