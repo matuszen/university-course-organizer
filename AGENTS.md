@@ -1,7 +1,8 @@
 # Zasady pracy
 
 Dokumentację, komentarze i komunikaty odpowiedzi API pisz po polsku. Logi, komunikaty
-poleceń administracyjnych, identyfikatory w kodzie oraz tytuły commitów pisz po angielsku. Tytuł commita ma najwyżej 70 znaków, bez opisu.
+poleceń administracyjnych, nazwy jobów i kroków CI, identyfikatory w kodzie oraz tytuły
+commitów pisz po angielsku. Tytuł commita ma najwyżej 70 znaków, bez opisu.
 
 Polecenia powłoki poprzedzaj `rtk`, w razie potrzeby używając `rtk proxy`.
 
