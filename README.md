@@ -4,19 +4,8 @@ REST API do zarządzania tygodniowym planem zajęć uczelni. System obsługuje
 semestry, przedmioty, prowadzących, sale i grupy oraz kontroluje kolizje terminów
 przy tworzeniu i aktualizacji planu.
 
-**Stos technologiczny** — Python 3.12, Django 5.2, Django REST Framework, SQLite,
+**Stos technologiczny** - Python 3.12, Django 5.2, Django REST Framework, SQLite,
 Gunicorn. Zależności są zarządzane przez uv i zapisane w `uv.lock`.
-
-## Zakres
-
-- Zarządzanie zasobami planu i cotygodniowymi terminami zajęć.
-- Filtrowanie planu według semestru, dnia, prowadzącego i grupy.
-- Wyszukiwanie sal dostępnych w zadanym przedziale godzin.
-- Kontrola kolizji sal, prowadzących i grup, również między semestrami.
-- Publiczny odczyt i zapis dla administratorów uwierzytelnionych tokenem.
-
-Pierwsza wersja udostępnia backend. Reguły planowania i zakres kolejnych etapów
-opisuje [specyfikacja](docs/specyfikacja.md).
 
 ## Środowisko lokalne
 
@@ -61,7 +50,7 @@ uv run python manage.py seed_demo
 Import działa w jednej transakcji i sprawdza kolizje przed zatwierdzeniem.
 Ponowne uruchomienie pomija istniejące rekordy. Zestaw obejmuje semestr zimowy
 2026/2027, przedmiot Bazy danych, grupę I2, prowadzącego Jana Kowalskiego i sale
-204 oraz 205. Termin demonstracyjny przypada w poniedziałki 10:00–11:30 w sali 204.
+204 oraz 205. Termin demonstracyjny przypada w poniedziałki 10:00-11:30 w sali 204.
 
 ## Uruchomienie w Dockerze
 
@@ -86,24 +75,3 @@ uv run pytest -q
 Testy korzystają z osobnej bazy SQLite. Szczegóły zawierają
 [instrukcja testów automatycznych](docs/testy-automatyczne.md)
 i [scenariusze ręczne](docs/testy-reczne.md).
-
-## CI/CD
-
-GitHub Actions uruchamia lint, kontrolę formatowania, weryfikację migracji i testy
-dla pull requestów do `main` oraz pushy na `main`. Po udanych kontrolach na `main`
-buduje obraz, sprawdza uruchomienie aplikacji z pustą bazą i publikuje go w
-`ghcr.io/matuszen/university-course-organizer` z tagami `latest` oraz SHA commita.
-Uprawnienia do publikacji zapewnia `GITHUB_TOKEN` z `packages: write`.
-
-## Struktura repozytorium
-
-| Katalog | Przeznaczenie |
-| --- | --- |
-| `config/` | ustawienia i konfiguracja Django |
-| `timetable/` | modele, REST API, reguły kolizji i skrypt danych początkowych |
-| `tests/` | testy API, współbieżności i importu danych |
-| `docs/` | specyfikacja, kontrakt API i instrukcje operacyjne |
-| `.github/workflows/` | kontrola jakości i publikacja obrazu |
-
-Dokumentacja i odpowiedzi API są w języku polskim. Logi, komunikaty poleceń
-administracyjnych oraz nazwy jobów i kroków CI są w języku angielskim.
