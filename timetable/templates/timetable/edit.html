@@ -1,0 +1,3 @@
+{% extends 'timetable/base.html' %}{% block content %}<h1 class="h3">{% if editing %}Edytuj zajęcia{% else %}Dodaj zajęcia{% endif %}</h1>
+{% if missing %}<p class="alert alert-warning">Uzupełnij dane przez API. Brakuje wpisów w kategoriach {{ missing|join:", " }}.</p>{% endif %}
+<form method="post" class="card card-body">{% csrf_token %}{% include 'timetable/fields.html' %}<div><button class="btn btn-primary" {% if missing %}disabled{% endif %}>Zapisz</button> <a href="{% url 'plan' %}">Anuluj</a></div></form>{% endblock %}

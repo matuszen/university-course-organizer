@@ -57,3 +57,9 @@ Po pushu na `main` dodatkowo skanuje gotowy obraz pod kątem podatności `HIGH`
 i `CRITICAL`, sprawdza start kontenera i publikuje obraz w GHCR. Wykrycie podatności
 z tych kategorii blokuje publikację. Polecenie do lokalnego skanu znajduje się
 w [instrukcji kontenera](kontener.md#kontrola-podatności-obrazu).
+
+## Widoki HTML
+
+`tests/test_web.py` sprawdza publiczny plan i dostępność sal, filtrowanie,
+tworzenie i usuwanie terminów oraz wycofanie kolidującej edycji.
+Obejmuje też uprawnienia administratora, ochronę CSRF i metodę wylogowania.

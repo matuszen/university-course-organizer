@@ -1,0 +1,17 @@
+{% extends 'timetable/base.html' %}{% block content %}
+<h1 class="h3">Plan zajęć</h1>
+{% if saved %}<p class="alert alert-success" role="status">Zmiany zostały zapisane.</p>{% endif %}
+{% if has_semesters %}
+<form method="get" class="card card-body mb-3">{% include 'timetable/fields.html' %}<div><button class="btn btn-primary">Pokaż</button> <a class="btn btn-outline-secondary" href="{% url 'plan' %}">Wyczyść filtry</a></div></form>
+<div class="d-flex flex-wrap gap-3 mb-3"><a href="{% url 'available-rooms' %}?{{ query }}">Sprawdź wolne sale</a>
+{% if user.is_staff %}<a href="{% url 'class-create' %}?semester={{ semester_id }}">Dodaj zajęcia</a>{% endif %}</div>
+{% for day, title in days %}{% for session in sessions %}{% if session.weekday == day %}
+{% ifchanged session.weekday %}<h2 class="h4 mt-4">{{ title }}</h2>{% endifchanged %}
+<article class="card card-body mb-2"><div class="d-flex flex-wrap justify-content-between gap-2">
+<div><strong>{{ session.start_time|time:'H:i' }}–{{ session.end_time|time:'H:i' }} · {{ session.subject.name }}</strong>
+<div>Sala {{ session.room.name }} · Grupa {{ session.group.name }}</div><div>{{ session.lecturer.first_name }} {{ session.lecturer.last_name }}</div><small>{{ session.semester.name }}</small></div>
+{% if user.is_staff %}<div><a href="{% url 'class-edit' session.pk %}">Edytuj</a> · <a href="{% url 'class-delete' session.pk %}">Usuń</a></div>{% endif %}
+</div></article>{% endif %}{% endfor %}{% endfor %}
+{% if not sessions and form.is_valid %}<p>Brak zajęć dla wybranych filtrów.</p>{% endif %}
+{% else %}<p>Brak semestrów.</p>{% if user.is_staff %}<p>Przygotuj dane przez API lub polecenie seed_demo.</p>{% endif %}{% endif %}
+{% endblock %}

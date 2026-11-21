@@ -2,7 +2,7 @@ from datetime import timedelta
 
 from rest_framework.exceptions import APIException, ValidationError
 
-from .models import ClassSession
+from .models import ClassSession, Semester
 
 
 class ScheduleConflict(APIException):
@@ -60,3 +60,19 @@ def validate_schedule(changed_session=None):
                     conflicts.append({"resource": resource, "class_id": other.pk})
         if conflicts:
             raise ScheduleConflict({"detail": "Kolizja terminów zajęć.", "conflicts": conflicts})
+
+
+def save_resource(serializer):
+    serializer.save()
+    if isinstance(serializer.instance, ClassSession):
+        validate_schedule(serializer.instance)
+    elif isinstance(serializer.instance, Semester):
+        validate_schedule()
+    return serializer.instance
+
+
+def available_rooms(**window):
+    from .models import Room
+
+    busy_rooms = [session.room_id for session in overlapping_sessions(**window)]
+    return Room.objects.exclude(pk__in=busy_rooms)

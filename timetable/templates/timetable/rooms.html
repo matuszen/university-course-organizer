@@ -1,0 +1,3 @@
+{% extends 'timetable/base.html' %}{% block content %}<h1 class="h3">Wolne sale</h1>
+<form method="get" class="card card-body mb-4">{% include 'timetable/fields.html' %}<div><button class="btn btn-primary">Sprawdź</button></div></form>
+{% if rooms is not None %}<h2 class="h4">Dostępne sale</h2><ul class="list-group">{% for room in rooms %}<li class="list-group-item">{{ room.name }}</li>{% empty %}<li class="list-group-item">Brak wolnych sal.</li>{% endfor %}</ul>{% endif %}{% endblock %}

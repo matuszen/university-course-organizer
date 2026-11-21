@@ -1,0 +1,1 @@
+{% extends 'timetable/base.html' %}{% block content %}<h1 class="h3">Logowanie</h1><p>Zmiany w planie wymagają konta administratora.</p><form method="post" class="card card-body">{% csrf_token %}{% include 'timetable/fields.html' %}<input type="hidden" name="next" value="{{ next }}"><div><button class="btn btn-primary">Zaloguj się</button></div></form>{% endblock %}

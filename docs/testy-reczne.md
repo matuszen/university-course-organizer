@@ -74,3 +74,16 @@ jest przypisana do zajęć. Usuń dodatkowy termin przez `DELETE classes/ID/`.
 Oczekiwany kod to `204`, a późniejszy odczyt tego terminu powinien zwrócić `404`.
 
 Daty semestrów i równoczesne rezerwacje są sprawdzane w testach automatycznych.
+
+## Interfejs przeglądarkowy
+
+1. Wykonaj migracje i `seed_demo`, uruchom serwer i otwórz `/`.
+2. Wybierz semestr zimowy 2026/2027 i grupę I2. Sprawdź zajęcia Bazy danych
+   w poniedziałek 10:00–11:30, sala 204. Skopiuj adres i sprawdź zachowanie filtrów.
+3. Przejdź do wolnych sal, podaj poniedziałek i godziny 10:00–11:30.
+   Sala 205 powinna być dostępna, a sala 204 zajęta.
+4. Zaloguj się kontem administratora i zmień salę tych zajęć na 205.
+   Po ponownym wyszukaniu sala 204 powinna być wolna.
+5. Spróbuj dodać kolidujące zajęcia. Sprawdź komunikat i zachowanie danych formularza.
+6. Otwórz potwierdzenie usunięcia, anuluj, a następnie potwierdź usunięcie.
+7. Sprawdź logowanie, wylogowanie i układ na telefonie oraz komputerze.

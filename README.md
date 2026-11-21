@@ -1,6 +1,6 @@
 # University Course Organizer
 
-REST API do zarządzania tygodniowym planem zajęć uczelni. System obsługuje
+Aplikacja z interfejsem i API do zarządzania tygodniowym planem zajęć uczelni. System obsługuje
 semestry, przedmioty, prowadzących, sale i grupy oraz kontroluje kolizje terminów
 przy tworzeniu i aktualizacji planu.
 
@@ -75,3 +75,16 @@ uv run pytest -q
 Testy korzystają z osobnej bazy SQLite. Szczegóły zawierają
 [instrukcja testów automatycznych](docs/testy-automatyczne.md)
 i [scenariusze ręczne](docs/testy-reczne.md).
+
+## Interfejs przeglądarkowy
+
+Po aktualizacji wykonaj `uv run python manage.py migrate`, aby utworzyć tabelę sesji.
+Strona główna `/` pokazuje plan z filtrami semestru, dnia, grupy i prowadzącego.
+Adres z filtrami można skopiować i udostępnić. Widok `/rooms/available/` wyszukuje
+wolne sale w wybranym terminie.
+
+Pod `/login/` zaloguj się istniejącym kontem administratora (`is_staff`).
+Po zalogowaniu można dodawać, edytować i usuwać terminy zajęć. Semestry,
+przedmioty, prowadzących, grupy i sale przygotuj przez API albo `seed_demo`.
+Logowanie w przeglądarce korzysta z sesji Django. API korzysta z tokenów.
+Bootstrap 5.3.3 jest ładowany z CDN i wymaga dostępu do internetu do wyświetlenia stylów.

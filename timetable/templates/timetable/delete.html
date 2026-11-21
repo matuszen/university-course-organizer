@@ -1,0 +1,1 @@
+{% extends 'timetable/base.html' %}{% block content %}<h1 class="h3">Usunąć zajęcia?</h1><p>{{ session.subject.name }} · dzień {{ session.weekday }} · {{ session.start_time|time:'H:i' }}–{{ session.end_time|time:'H:i' }}</p><form method="post">{% csrf_token %}<button class="btn btn-danger">Usuń zajęcia</button> <a href="{% url 'plan' %}">Anuluj</a></form>{% endblock %}

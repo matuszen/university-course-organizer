@@ -15,7 +15,7 @@ from .serializers import (
     SubjectSerializer,
     TimeWindowSerializer,
 )
-from .services import ScheduleConflict, overlapping_sessions, validate_schedule
+from .services import ScheduleConflict, available_rooms, save_resource
 
 
 class ResourceViewSet(viewsets.ModelViewSet):
@@ -36,11 +36,7 @@ class ResourceViewSet(viewsets.ModelViewSet):
         return super().dispatch(request, *args, **kwargs)
 
     def perform_create(self, serializer):
-        serializer.save()
-        if isinstance(serializer.instance, ClassSession):
-            validate_schedule(serializer.instance)
-        elif isinstance(serializer.instance, Semester):
-            validate_schedule()
+        save_resource(serializer)
 
     def perform_update(self, serializer):
         self.perform_create(serializer)
@@ -80,8 +76,7 @@ class RoomViewSet(ResourceViewSet):
     def available(self, request):
         params = TimeWindowSerializer(data=request.query_params)
         params.is_valid(raise_exception=True)
-        busy_rooms = [session.room_id for session in overlapping_sessions(**params.validated_data)]
-        rooms = self.get_queryset().exclude(pk__in=busy_rooms)
+        rooms = available_rooms(**params.validated_data)
         page = self.paginate_queryset(rooms)
         return self.get_paginated_response(self.get_serializer(page, many=True).data)
 

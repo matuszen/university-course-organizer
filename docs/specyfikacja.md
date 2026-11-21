@@ -72,3 +72,9 @@ w pliku SQL. Przy zmianie schematu trzeba utrzymać zgodność skryptu z migracj
 
 Logi i komunikaty poleceń administracyjnych są w języku angielskim.
 Dokumentacja oraz komunikaty walidacji zwracane przez API są w języku polskim.
+
+## Interfejs przeglądarkowy
+
+Szablony Django i Bootstrap udostępniają publiczny plan zajęć i wyszukiwarkę
+wolnych sal. Administrator zalogowany przez sesję może zarządzać terminami.
+Formularze korzystają ze wspólnej z API logiki kolizji i dostępności sal.
