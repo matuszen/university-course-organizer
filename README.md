@@ -49,8 +49,7 @@ uv run python manage.py seed_demo
 
 Import działa w jednej transakcji i sprawdza kolizje przed zatwierdzeniem.
 Ponowne uruchomienie pomija istniejące rekordy. Zestaw obejmuje semestr zimowy
-2026/2027, przedmiot Bazy danych, grupę I2, prowadzącego Jana Kowalskiego i sale
-204 oraz 205. Termin demonstracyjny przypada w poniedziałki 10:00-11:30 w sali 204.
+2026/2027, 5 przedmiotów, 4 prowadzących, 5 sal, grupy ABiBD1–ABiBD3 i 12 terminów. Termin demonstracyjny przypada w poniedziałki 10:00-11:30 w sali 204.
 
 ## Uruchomienie w Dockerze
 
@@ -88,3 +87,9 @@ Po zalogowaniu można dodawać, edytować i usuwać terminy zajęć. Semestry,
 przedmioty, prowadzących, grupy i sale przygotuj przez API albo `seed_demo`.
 Logowanie w przeglądarce korzysta z sesji Django. API korzysta z tokenów.
 Bootstrap 5.3.3 jest ładowany z CDN i wymaga dostępu do internetu do wyświetlenia stylów.
+
+Polecenie `seed_demo` tworzy demonstracyjne konto administratora z loginem `admin`
+i hasłem `admin`. Istniejące konto o tym loginie zachowuje hasło i uprawnienia.
+Dane służą do lokalnej demonstracji. Starsza grupa demonstracyjna I2 zostaje
+przemianowana na ABiBD1, jeśli ta nazwa jest wolna, z zachowaniem przypisanych zajęć.
+Pola godzin przyjmują format 24-godzinny `HH:MM`, np. `14:30`.

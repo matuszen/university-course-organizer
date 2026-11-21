@@ -46,8 +46,22 @@ class FilterForm(forms.Form):
 class WindowForm(forms.Form):
     semester = ResourceChoice(Semester.objects.all(), label="Semestr")
     weekday = forms.TypedChoiceField(choices=DAYS, coerce=int, label="Dzień")
-    start_time = forms.TimeField(label="Od", widget=forms.TimeInput(attrs={"type": "time"}))
-    end_time = forms.TimeField(label="Do", widget=forms.TimeInput(attrs={"type": "time"}))
+    start_time = forms.TimeField(
+        label="Od",
+        input_formats=["%H:%M"],
+        widget=forms.TimeInput(
+            format="%H:%M",
+            attrs={"placeholder": "HH:MM", "pattern": "[0-9]{2}:[0-9]{2}", "inputmode": "numeric"},
+        ),
+    )
+    end_time = forms.TimeField(
+        label="Do",
+        input_formats=["%H:%M"],
+        widget=forms.TimeInput(
+            format="%H:%M",
+            attrs={"placeholder": "HH:MM", "pattern": "[0-9]{2}:[0-9]{2}", "inputmode": "numeric"},
+        ),
+    )
 
 
 class SessionForm(forms.ModelForm):
@@ -65,8 +79,22 @@ class SessionForm(forms.ModelForm):
         ]
         widgets = {
             "weekday": forms.Select(choices=DAYS),
-            "start_time": forms.TimeInput(format="%H:%M", attrs={"type": "time"}),
-            "end_time": forms.TimeInput(format="%H:%M", attrs={"type": "time"}),
+            "start_time": forms.TimeInput(
+                format="%H:%M",
+                attrs={
+                    "placeholder": "HH:MM",
+                    "pattern": "[0-9]{2}:[0-9]{2}",
+                    "inputmode": "numeric",
+                },
+            ),
+            "end_time": forms.TimeInput(
+                format="%H:%M",
+                attrs={
+                    "placeholder": "HH:MM",
+                    "pattern": "[0-9]{2}:[0-9]{2}",
+                    "inputmode": "numeric",
+                },
+            ),
         }
         field_classes = {
             name: ResourceChoice for name in ("semester", "subject", "lecturer", "room", "group")

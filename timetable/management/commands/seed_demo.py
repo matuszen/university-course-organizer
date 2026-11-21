@@ -1,6 +1,7 @@
 import sqlite3
 from pathlib import Path
 
+from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand, CommandError
 from django.db import connection, transaction
 from rest_framework.exceptions import APIException
@@ -27,4 +28,9 @@ class Command(BaseCommand):
             validate_schedule()
         except APIException as exc:
             raise CommandError("Demo data conflicts with the current timetable.") from exc
+        user_model = get_user_model()
+        if not user_model.objects.filter(username="admin").exists():
+            user_model.objects.create_user(
+                "admin", password="admin", is_staff=True, is_superuser=True
+            )
         self.stdout.write(self.style.SUCCESS("Demo data loaded successfully."))

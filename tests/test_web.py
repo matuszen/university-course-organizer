@@ -86,3 +86,13 @@ def test_invalid_window_and_login(payload, staff):
     assert client.get("/classes/new/").status_code == 200
     assert client.post("/logout/").status_code == 302
     assert client.get("/classes/new/").status_code == 302
+
+
+def test_active_navigation_and_24_hour_fields():
+    client = Client()
+    plan = client.get("/").content.decode()
+    rooms = client.get("/rooms/available/").content.decode()
+    assert 'aria-current="page" href="/"' in plan
+    assert 'aria-current="page" href="/rooms/available/"' in rooms
+    assert 'placeholder="HH:MM"' in rooms
+    assert 'type="time"' not in rooms

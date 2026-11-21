@@ -12,10 +12,16 @@ pytestmark = pytest.mark.django_db
 def test_seed_demo_is_repeatable():
     call_command("seed_demo")
     call_command("seed_demo")
-    assert ClassSession.objects.count() == 1
+    assert ClassSession.objects.count() == 12
     assert Semester.objects.count() == 1
-    assert Room.objects.count() == 2
-    assert Lecturer.objects.count() == Subject.objects.count() == StudentGroup.objects.count() == 1
+    assert Room.objects.count() == 5
+    assert Lecturer.objects.count() == 4
+    assert Subject.objects.count() == 5
+    assert list(StudentGroup.objects.values_list("name", flat=True)) == [
+        "ABiBD1",
+        "ABiBD2",
+        "ABiBD3",
+    ]
 
 
 def test_seed_conflict_rolls_back(admin, payload):
@@ -34,7 +40,10 @@ def test_seed_uses_existing_records_without_overwriting_them():
     call_command("seed_demo", stdout=output)
     lecturer.refresh_from_db()
     assert lecturer.last_name == "Nowak"
-    assert ClassSession.objects.get().lecturer_id == lecturer.pk
+    assert (
+        ClassSession.objects.get(subject__name="Bazy danych", group__name="ABiBD1").lecturer_id
+        == lecturer.pk
+    )
     assert output.getvalue().strip() == "Demo data loaded successfully."
 
 
@@ -59,4 +68,15 @@ def test_seed_handles_data_created_before_sql_script():
         end_time="11:30",
     )
     call_command("seed_demo")
-    assert ClassSession.objects.get().pk == existing.pk
+    assert ClassSession.objects.filter(pk=existing.pk, group__name="ABiBD1").exists()
+
+
+def test_demo_admin_is_created_and_preserved(django_user_model):
+    call_command("seed_demo")
+    user = django_user_model.objects.get(username="admin")
+    assert user.is_staff and user.check_password("admin")
+    user.set_password("changed-password")
+    user.save()
+    call_command("seed_demo")
+    user.refresh_from_db()
+    assert user.check_password("changed-password")

@@ -78,7 +78,7 @@ Daty semestrów i równoczesne rezerwacje są sprawdzane w testach automatycznyc
 ## Interfejs przeglądarkowy
 
 1. Wykonaj migracje i `seed_demo`, uruchom serwer i otwórz `/`.
-2. Wybierz semestr zimowy 2026/2027 i grupę I2. Sprawdź zajęcia Bazy danych
+2. Wybierz semestr zimowy 2026/2027 i grupę ABiBD1. Sprawdź zajęcia Bazy danych
    w poniedziałek 10:00–11:30, sala 204. Skopiuj adres i sprawdź zachowanie filtrów.
 3. Przejdź do wolnych sal, podaj poniedziałek i godziny 10:00–11:30.
    Sala 205 powinna być dostępna, a sala 204 zajęta.
