@@ -56,3 +56,19 @@ Baza dodatkowo kontroluje kolejność dat i godzin, zakres dni oraz klucze obce.
 Kolejne wersje mogą objąć frontend Django, wyjątki kalendarzowe i tygodnie parzyste.
 Automatyczne generowanie planu i integracje z systemami uczelni wymagają osobnego
 rozszerzenia zakresu. Obecny projekt udostępnia API i bazę SQLite.
+
+## Dane początkowe
+
+Zestaw demonstracyjny jest zdefiniowany w `timetable/sql/seed_demo.sql`.
+Polecenie `python manage.py seed_demo` wykonuje instrukcje SQL przez połączenie
+Django w jednej transakcji, a następnie sprawdza kolizje w planie. Błąd cofa
+cały import. Skrypt identyfikuje zasoby po nazwach lub adresie e-mail, a termin
+po powiązaniach, dniu i godzinach. Ponowne uruchomienie pomija istniejące wpisy.
+Wartości w istniejących zasobach zachowują aktualny stan.
+
+Dane demonstracyjne ładuje się jawnie po migracjach. Komenda jest dostępna
+zarówno lokalnie, jak i w obrazie kontenera. Edycja zestawu startowego odbywa się
+w pliku SQL. Przy zmianie schematu trzeba utrzymać zgodność skryptu z migracjami.
+
+Logi i komunikaty poleceń administracyjnych są w języku angielskim.
+Dokumentacja oraz komunikaty walidacji zwracane przez API są w języku polskim.

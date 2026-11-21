@@ -1,5 +1,7 @@
 #!/bin/sh
 set -eu
-: "${DJANGO_SECRET_KEY:?Ustaw DJANGO_SECRET_KEY przed uruchomieniem kontenera.}"
+: "${DJANGO_SECRET_KEY:?Set DJANGO_SECRET_KEY before starting the container.}"
+printf '%s\n' 'Applying database migrations.'
 python manage.py migrate --noinput
+printf '%s\n' 'Starting application.'
 exec "$@"

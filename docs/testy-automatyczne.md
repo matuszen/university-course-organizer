@@ -34,7 +34,9 @@ wysyła dwie rezerwacje z osobnych połączeń. Oczekiwany wynik to jedno `201`,
 `409` i dokładnie jeden zapisany termin.
 
 Testy danych przykładowych sprawdzają ponowne uruchomienie komendy oraz cofnięcie
-całego zestawu, gdy dane kolidują z istniejącym planem.
+całego zestawu, gdy dane kolidują z istniejącym planem. Dodatkowe przypadki
+obejmują zachowanie zmienionych danych istniejącego prowadzącego, angielski
+komunikat zakończenia oraz zgodność z danymi zapisanymi wcześniej przez ORM.
 
 ## Kontrola migracji i kontenera
 
